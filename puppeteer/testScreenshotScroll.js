@@ -37,7 +37,7 @@ const joinPic = require('./util/joinPic');
   console.log(title);
 
   // 网页加载最大高度
-  const max_height_px = 10000;
+  let max_height_px = 10000;
   // 滚动高度
   let scrollStep = 800;
   let scrollStepPlus = 801;
@@ -50,6 +50,18 @@ const joinPic = require('./util/joinPic');
   await page.evaluate(() => { // 掘金网站首页进入底部浮框
     document.querySelector('.recommend-box').remove();
   });
+
+  var maxH = {
+    val: 0
+  }
+
+  maxH = await page.evaluate(() => {
+    return {
+      val: document.scrollingElement.offsetHeight
+    }
+  })
+
+  max_height_px = Math.max(maxH.val, scrollStepPlus)
 
   util.sleep(500)
 
