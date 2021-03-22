@@ -1,0 +1,21 @@
+{
+  "name": "simpleserver",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "serve": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "cookie-parser": "^1.4.5",
+    "express": "^4.17.1",
+    "gm": "^1.23.1",
+    "images": "^3.2.3",
+    "lowdb": "^1.0.0",
+    "puppeteer": "^8.0.0"
+  }
+}
