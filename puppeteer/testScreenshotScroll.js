@@ -76,7 +76,7 @@ const joinPic = require('./util/joinPic');
         if (document.scrollingElement) {
           let scrollTop = document.scrollingElement.scrollTop;
           document.scrollingElement.scrollTop = scrollTop + Number(scrollStep);
-
+          
           if (
             document.scrollingElement.scrollTop + Number(scrollStep) >
             max_height_px

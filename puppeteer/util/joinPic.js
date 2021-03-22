@@ -32,7 +32,6 @@ function main () {
     })
     var d = new Date()
     d = util.fmtDate(d, 'yyyy-MM-dd hh-mm-ss')
-    console.log(gmImg)
     gmImg.write('./output/' + d + '.png', (err) => {
       console.log(err)
     })
