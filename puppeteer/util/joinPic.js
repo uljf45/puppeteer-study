@@ -1,6 +1,10 @@
 const fs = require('fs');
 const gm  = require('gm') //安装 ImageMagick、GraphicsMagick、ghostscript, 然后重启
 const util = require('../util/index')
+
+/**
+ * 合并 folder 文件夹下的所有图片 到output 按时间命名
+ */
 function main () {
   let path = 'folder' //导出目录
   let files = []; //文件
