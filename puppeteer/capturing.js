@@ -3,7 +3,9 @@ const util = require('./util/index');
 const joinPic = require('./util/joinPic');
 const startShot = require('./util/startShot');
 
-let url = process.argv[2];
+let params = process.argv.slice(2);
+let url = params[0];
+let isMobile = params.includes('--mobile');
 
 (async () => {
   if (url) {
@@ -19,6 +21,10 @@ let url = process.argv[2];
         document.querySelector('.ntes_nav_wrap').remove();
       }  
     }
-    startShot.do(process.argv[2], callbacks)
+    let options = {
+      callbacks,
+      isMobile,
+    }
+    startShot.do(process.argv[2], options)
   }
 })();
