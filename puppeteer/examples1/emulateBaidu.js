@@ -19,18 +19,18 @@ let isMobile = true; //params.includes('--mobile');
 
   await page.emulate(puppeteer.devices["iPhone X"]);
 
-  if (isMobile) {
-    await page.emulate(puppeteer.devices['iPhone X']);
-    const pageSize = {
-      width: 375,
-      height: 812
-    };
-    console.log(pageSize.height)
-    await page.setViewport({
-      width: pageSize.width,
-      height: pageSize.height
-    });
-  }
+  // if (isMobile) {  //设置 viewport 会导致截全屏右边不全
+  //   await page.emulate(puppeteer.devices['iPhone X']);
+  //   const pageSize = {
+  //     width: 375,
+  //     height: 812
+  //   };
+  //   console.log(pageSize.height)
+  //   await page.setViewport({
+  //     width: pageSize.width,
+  //     height: pageSize.height
+  //   });
+  // }
 
 
 
