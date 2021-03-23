@@ -1,4 +1,5 @@
 const fs = require('fs');
+const path = require('path')
 
 //延时函数
 function sleep(delay) {
@@ -41,6 +42,12 @@ function fmtDate(date, fmt) {
 }
 
 
+function getCurDateStrForFile(fmt) {
+  var d = new Date()
+  d = fmtDate(d, 'yyyy-MM-dd hh-mm-ss')
+  return d
+}
+
 // 删除path下的所有文件
 function delDir(path) {
   let files = [];
@@ -57,8 +64,22 @@ function delDir(path) {
   }
 };
 
+async function existsFolder (realPath) {
+  const absPath = path.resolve(__dirname, realPath);
+  console.log('abs', absPath)
+  fs.stat(absPath, function (err, stats) {
+    if (!fs.stats) {
+      fs.mkdir(absPath, { recursive: true }, err => {
+        if (err) throw err;
+      });
+    }
+  })
+};
+
 module.exports = {
   sleep,
   delDir,
-  fmtDate
+  fmtDate,
+  getCurDateStrForFile,
+  existsFolder
 }
