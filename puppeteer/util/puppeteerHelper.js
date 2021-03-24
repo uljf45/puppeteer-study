@@ -226,7 +226,12 @@ async function fullPageScreenShot (page) {
 
 }
 
+async function captureFull (page) {
+
+}
+
 module.exports = {
   startScrollCapture,
-  fullPageScreenShot
+  fullPageScreenShot,
+  captureFull,
 }

@@ -67,6 +67,25 @@ let isMobile = true; //params.includes('--mobile');
   //   fullPage: true
   // })
 
+  //模拟对话
+
+  page.on('console', async msg => {
+    let word = msg.text()
+    if (word === 'close') {
+      await browser.close()
+    } else {
+      console.log(word)
+      if (/^czm talk/.test(word)) {
+
+      } else {
+        page.evaluate((txt) => {
+          console.log('czm talk:', txt)
+        }, word)
+      }
+      
+    }
+  })
+
 
   
   // await browser.close()

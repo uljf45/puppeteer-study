@@ -1,4 +1,4 @@
-//来源 https://blog.csdn.net/ASAS1314/article/details/84847770?spm=1001.2014.3001.5501
+//来源 https://blog.csdn.net/ASAS1314/article/details/84847770?spm=1001.2014.3001.5501  第二种方式截全图
 const puppeteer = require('puppeteer');
 const util = require('../util/index');
 const path = require('path');
@@ -8,7 +8,7 @@ const path = require('path');
   let timeoutMillSeconds = 10000;
   let waitUntilStr = 'domcontentloaded';
 
-  let headlessFlag = false;
+  let headlessFlag = true //false;   true才能进行PDF截屏
   const system_warn = 1002
 
   let args = [
@@ -98,9 +98,21 @@ const path = require('path');
     })
 
     await page.screenshot({
-      path: path.resolve(__dirname, `../output/${util.getCurDateStrForFile()}.png`),
-      fullPage: true
+      path: path.resolve(__dirname, `../output/${util.getCurDateStrForFile()}.jpg`),
+      fullPage: true,
+      quality: 80
     });
+
+    if (requestUrl == 'https://www.163.com') {
+      await page.pdf({
+        path: path.resolve(__dirname, `../output/163_${util.getCurDateStrForFile()}.pdf`),
+        fullPage: true,
+      })
+    }
+
+
+
+    await browser.close()
   } catch(err) {
     console.log(err)
   }
