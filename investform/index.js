@@ -19,7 +19,9 @@ let site = 'http://dev.hdfax.com/v2/m/investmentFormInput/index.html'
       "--no-sandbox", 
     ],
     ignoreDefaultArgs: [
-      "--enable-automation" // 忽略 显示自动化测试工具控制中
+      "--enable-automation", // 忽略 显示自动化测试工具控制中
+      '--disable-extensions' // 允许扩展程序
+
     ]
   })
 
