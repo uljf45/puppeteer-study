@@ -2,6 +2,7 @@ const puppeteer = require('puppeteer')
 
 let site = 'http://dev.hdfax.com/v2/m/investmentFormInput/index.html'
 ;(async function () {
+  
   const browser = await puppeteer.launch({
     // ignoreHTTPSErrors: true,
     headless: false, 
@@ -11,6 +12,7 @@ let site = 'http://dev.hdfax.com/v2/m/investmentFormInput/index.html'
       hasTouch: true,
       isMobile: true,
     },
+    devtools: true,
     args: [
       '--disable-web-security', //https 跨域
       '--allow-running-insecure-content',  //https 跨域
@@ -26,6 +28,7 @@ let site = 'http://dev.hdfax.com/v2/m/investmentFormInput/index.html'
   })
 
   const page = await browser.newPage()
+  
 
   await page.emulate(puppeteer.devices["iPhone X"])
 
@@ -33,6 +36,7 @@ let site = 'http://dev.hdfax.com/v2/m/investmentFormInput/index.html'
     waitUntil: 'load'
   })
 
+  
 
   //cdp session 模拟浏览器打开手机模式 start
   let client = await page.target().createCDPSession()
@@ -88,6 +92,7 @@ let site = 'http://dev.hdfax.com/v2/m/investmentFormInput/index.html'
 //cdp session 模拟浏览器打开手机模式 end
 
 
+
   let resp = await page.waitForResponse(response => /op_query_all_declaration_form/.test(response.url()))
   let respJson = await resp.json()
   // console.log(respJson)
@@ -137,6 +142,7 @@ let site = 'http://dev.hdfax.com/v2/m/investmentFormInput/index.html'
     //   waitUntil: 'domcontentloaded'
     // })
   }
+  
 
   await page.waitForXPath(`//li[@class="prev_list_inner"]/div[string()="填写报单"]`)
 
