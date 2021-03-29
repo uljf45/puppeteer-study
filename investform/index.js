@@ -90,7 +90,7 @@ let site = 'http://dev.hdfax.com/v2/m/investmentFormInput/index.html'
 
   let resp = await page.waitForResponse(response => /op_query_all_declaration_form/.test(response.url()))
   let respJson = await resp.json()
-  console.log(respJson)
+  // console.log(respJson)
   if (respJson.resultCode != '1000') { //请求失败跳转到登录
     let captureRequest =  await page.waitForRequest(request => /getCaptcha/.test(request.url())) // 等待获取验证码
 
@@ -124,7 +124,7 @@ let site = 'http://dev.hdfax.com/v2/m/investmentFormInput/index.html'
 
     try {
       let rep = await page.waitForResponse(response => /login/.test(response.url()))
-      console.log(rep)
+      // console.log(rep)
     } catch(e) {
       await page.goto(site)
     }
@@ -151,7 +151,7 @@ let site = 'http://dev.hdfax.com/v2/m/investmentFormInput/index.html'
 
   let spRes = await respSellableProduct.json()
   let prdName = spRes["resvProds"][0]["productName"]
-  console.log(prdName)
+  // console.log(prdName)
 
   let div = await page.$x(`//span[string()="单据类型*"]/../div`)
   await div[0].tap()
@@ -224,6 +224,7 @@ let site = 'http://dev.hdfax.com/v2/m/investmentFormInput/index.html'
   await page.waitForXPath(`//li[string()="中国工商银行"]`)
   sel = await page.$x(`//li[string()="中国工商银行"]`)
   await sel[0].tap()
+  console.log('select bank name done')
 
   await page.waitForResponse(resp => /op_query_bank_province_list/.test(resp.url()))
   input = await page.$x(`//input[@placeholder="请输入开户行省份"]`)
@@ -233,6 +234,8 @@ let site = 'http://dev.hdfax.com/v2/m/investmentFormInput/index.html'
   await page.waitForXPath(`//li[string()="广东省"]`)
   sel = await page.$x(`//li[string()="广东省"]`)
   await sel[0].tap()
+
+  console.log('select province done')
 
   await page.waitForResponse(resp => /op_query_bank_city_list/.test(resp.url()))
   input = await page.$x(`//input[@placeholder="请输入开户行城市"]`)
@@ -254,6 +257,18 @@ let site = 'http://dev.hdfax.com/v2/m/investmentFormInput/index.html'
   
   sel = await page.$x('//span[string()="客户身份*"]/../select')
   await sel[0].select("1")  // select 选中下面的option 值为0
+
+  let uploadImg = await page.$x(`//div[contains(text(), "上传凭证信息")]//div[contains(@class, "img_select_leftx")]/img`)
+
+  await uploadImg[0].evaluate(ele => { //滚动到上传图片那
+    console.log('ele', ele)
+    ele.scrollIntoView()
+  })
+
+  let uploadInput = await page.$x(`//div[contains(text(), "上传凭证信息")]//input`)
+  uploadInput = uploadInput[0]
+  await uploadInput.uploadFile(`C:\\Users\\chenzemin\\Pictures\\icon-5.png`) // 上传文件
+  // await uploadImg[0].tap()
 
   console.log('done')
   
