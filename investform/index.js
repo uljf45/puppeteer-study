@@ -1,4 +1,6 @@
 const puppeteer = require('puppeteer')
+const fs = require('fs')
+const path = require('path')
 
 let site = 'http://dev.hdfax.com/v2/m/investmentFormInput/index.html'
 ;(async function () {
@@ -26,6 +28,11 @@ let site = 'http://dev.hdfax.com/v2/m/investmentFormInput/index.html'
 
     ]
   })
+
+  const browserWSEndpoint = browser.wsEndpoint() 
+  console.log(browserWSEndpoint)
+  let outPath = path.resolve(__dirname, 'browserWSEndpoint.txt')
+  fs.writeFileSync(outPath, browserWSEndpoint) //将该浏览器的ws endpoint 保存到文件
 
   const page = await browser.newPage()
   
