@@ -58,3 +58,70 @@ exports.mimicPhone =  async function (page) {
   })
   //cdp session 模拟浏览器打开手机模式 end
 }
+
+/**
+ * @param {puppeteer.Page} page 
+ * @returns async function
+ * 
+ * @example
+ * const xpath = `//div`
+ * const simpleType = pupHelp.simpleType(page)
+ * await simpleType(xpath, 'some words')
+ */
+exports.simpleType = function (page) {
+  return async function (xpath, txt, options) {
+    let el = await page.$x(xpath)
+    await el[0].type(txt, options)
+  }
+}
+
+/**
+ * @param {puppeteer.Page} page 
+ * @returns async function
+ * 
+ * @example
+ * const xpath = `//div`
+ * const simpleWaitThenType = pupHelp.simpleWaitThenType(page)
+ * await simpleWaitThenType(xpath, 'some words')
+ */
+exports.simpleWaitThenType = function (page) {
+  return async function (xpath, txt) {
+    await page.waitForXPath(xpath)
+    let el = await page.$x(xpath)
+    await el[0].type(txt)
+  }
+}
+
+/**
+ * 
+ * @param {puppeteer.Page} page 
+ * @returns async function
+ * @example
+ * const xpath = `//div`
+ * const simpleTap = pupHelp.simpleTap(page)
+ * await simpleTap(xpath)
+ */
+exports.simpleTap = function (page) {
+  return async function (xpath) {
+    let el = await page.$x(xpath)
+    await el[0].tap()
+  }
+}
+
+/**
+ * 
+ * @param {puppeteer.Page} page 
+ * @returns async function
+ * @example
+ * const xpath = `//div`
+ * const simpleWaitThenTap = pupHelp.simpleWaitThenTap(page)
+ * await simpleWaitThenTap(xpath)
+ */
+ exports.simpleWaitThenTap = function (page) {
+  return async function (xpath) {
+    await page.waitForXPath(xpath)
+    let el = await page.$x(xpath)
+    await el[0].tap()
+  }
+}
+

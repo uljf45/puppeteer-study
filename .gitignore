@@ -91,3 +91,5 @@ sw.*
 
 puppeteer/folder/*.png
 puppeteer/output
+
+investform/browserWSEndpoint.txt
