@@ -37,12 +37,12 @@ let site = 'http://dev.hdfax.com/v2/m/investmentFormInput/index.html'
   const page = await browser.newPage()
 
   await page.emulate(puppeteer.devices["iPhone X"]) //模拟 手机
+  await pupHelp.mimicPhone(page) // 模拟 f12 手机模式
 
   await page.goto(site, {
     waitUntil: 'load'
   })
 
-  await pupHelp.mimicPhone(page) // 模拟 f12 手机模式
 
   const simpleType = pupHelp.simpleType(page) //提取 获取元素并填写
   const simpleTap = pupHelp.simpleTap(page) //提取 获取元素并点击
@@ -118,20 +118,11 @@ let site = 'http://dev.hdfax.com/v2/m/investmentFormInput/index.html'
   await simpleType(`//input[@placeholder="请填写客户姓名"]`, '陈泽敏')
   await simpleType(`//input[@placeholder="请填写证件号码"]`, '440582199005161810')
 
-  try {
-    page.waitForXPath('//div[@class="pop_name" and @style=""]/button').then(async () => { //异步执行, 不使用await await会阻塞主线程
-      let popNameKeHu = await page.$x('//div[@class="pop_name"]/button')
-      await popNameKeHu[0].tap()
-    })
-  } catch(err) {
-
-  }
-
   let sel = await page.$x('//span[string()="是否有推荐人*"]/../select') // select下拉框选择
   await sel[0].select("0")  // select 选中下面的option 值为0
 
   await simpleType(`//input[@placeholder="请输入产品名称"]`, prdName)
-  await simpleTap(`//li[string()="${prdName}"]`)
+  await simpleWaitThenTap(`//li[string()="${prdName}"]`)
 
   await simpleType(`//input[@placeholder="请输入金额"]`, '11')
 
@@ -183,6 +174,19 @@ let site = 'http://dev.hdfax.com/v2/m/investmentFormInput/index.html'
   let uploadInput = await page.$x(`//div[contains(text(), "上传凭证信息")]//input`)
   uploadInput = uploadInput[0]
   await uploadInput.uploadFile(`C:\\Users\\chenzemin\\Pictures\\icon-5.png`) // 上传文件
+
+  try {
+    page.waitForXPath('//div[@class="pop_name" and @style=""]/button', {
+      timeout: 10000
+    }).then(() => { //异步执行, 不使用await await会阻塞主线程
+      console.log('press ok')
+      page.$x('//div[@class="pop_name"]/button').then(el => {
+        el[0].tap() //此处tap 可能会与页面其他元素的tap相互影响， 因此放在最后执行
+      })
+    })
+  } catch(err) {
+
+  }
 
   console.log('done')
   
