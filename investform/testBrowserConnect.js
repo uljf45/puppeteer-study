@@ -4,20 +4,19 @@ const path = require('path')
 const pupHelp = require('./util/pupHelp')
 
 ;(async function () {
-  let filePath = path.join(__dirname, 'browserWSEndpoint.txt')
-  const browserWSEndpoint = fs.readFileSync(filePath, { //从文件里读取ws endpoint
-    encoding: 'utf-8'
-  })
-  console.log(browserWSEndpoint)
 
-  const browser = await puppeteer.connect({browserWSEndpoint}) //连接到已经存在的浏览器
-
+  const browser = await pupHelp.connectToExist()
   const page = await browser.newPage()
 
   // await page.emulate(puppeteer.devices["iPhone X"]) //模拟 手机
   // await pupHelp.mimicPhone(page) //模拟f12 切换手机模式
 
   await page.emulate(puppeteer.devices["Blackberry PlayBook landscape"])
+  await page.setViewport({
+    width: 1024,
+    height: 800,
+    isMobile: false
+  })
   await page.goto(`https://www.baidu.com`)
 
   await page.evaluate(() => {

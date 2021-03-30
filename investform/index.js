@@ -38,7 +38,11 @@ let site = 'http://dev.hdfax.com/v2/m/investmentFormInput/index.html'
 
   await page.emulate(puppeteer.devices["iPhone X"]) //模拟 手机
   await pupHelp.mimicPhone(page) // 模拟 f12 手机模式
-
+  await page.setViewport({
+    width: 375,
+    height: 812,
+    isMobile: true,
+  })
   await page.goto(site, {
     waitUntil: 'load'
   })
