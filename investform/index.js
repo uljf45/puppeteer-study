@@ -3,7 +3,7 @@ const fs = require('fs')
 const path = require('path')
 const pupHelp = require('./util/pupHelp')
 
-let site = 'http://dev.hdfax.com/v2/m/investmentFormInput/index.html'
+let site = 'https://qpromotion.hdfax.com/v2/m/investmentFormInput/index.html'
 ;(async function () {
   
   const browser = await puppeteer.launch({
@@ -19,7 +19,7 @@ let site = 'http://dev.hdfax.com/v2/m/investmentFormInput/index.html'
     args: [
       '--disable-web-security', //https 跨域
       '--allow-running-insecure-content',  //https 跨域
-      '--user-data-dir=C:\\MyChromeDevUserData', //https 跨域 设置浏览器个人配置的路径，储存配置 cookie 使下次启动时能直接获取
+      '--user-data-dir=C:\\MyChromeDevUserData2', //https 跨域 设置浏览器个人配置的路径，储存配置 cookie 使下次启动时能直接获取
       ' --auto-open-devtools-for-tabs', // 打开 devtool
       "--no-sandbox", 
     ],
@@ -35,17 +35,19 @@ let site = 'http://dev.hdfax.com/v2/m/investmentFormInput/index.html'
   fs.writeFileSync(outPath, browserWSEndpoint) //将该浏览器的ws endpoint 保存到文件
 
   const page = await browser.newPage()
-
-  await page.emulate(puppeteer.devices["iPhone X"]) //模拟 手机
-  await pupHelp.mimicPhone(page) // 模拟 f12 手机模式
   await page.setViewport({
     width: 375,
     height: 812,
     isMobile: true,
   })
+  await page.emulate(puppeteer.devices["iPhone 7"]) //模拟 手机
+
   await page.goto(site, {
     waitUntil: 'load'
   })
+
+  await pupHelp.mimicPhone(page) // 模拟 f12 手机模式
+
 
 
   const simpleType = pupHelp.simpleType(page) //提取 获取元素并填写
@@ -65,6 +67,10 @@ let site = 'http://dev.hdfax.com/v2/m/investmentFormInput/index.html'
     // console.log(txt)
 
     await simpleType(`//input[@placeholder="输入手机号"]`, "15537145866")
+
+    let img =  await page.$x(`//img[@name="image"]`)
+    img = img[0]
+    let src = await img.evaluate(img => img.src)
 
     await simpleType(`//input[@placeholder="输入验证码"]`, "1234")
   
@@ -105,6 +111,9 @@ let site = 'http://dev.hdfax.com/v2/m/investmentFormInput/index.html'
   let [respBankInfo, respSellableProduct] = await Promise.all([  //判断多个接口请求
     page.waitForResponse(resp => /op_query_recommender_bank_info/.test(resp.url())),
     page.waitForResponse(resp => /op_query_sellable_resv_prod_quote_by_group_id/.test(resp.url())),
+    page.waitForResponse(resp => /op_query_all_valid_bill_type/.test(resp.url())),
+    page.waitForResponse(resp => /op_query_all_cert_type/.test(resp.url())),
+    
   ])
 
   let spRes = await respSellableProduct.json()

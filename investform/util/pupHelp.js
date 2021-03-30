@@ -34,7 +34,7 @@ function getPromise(url) {
 
       res.on('end', () => {
         // console.log('in http end')
-        resolve(true)
+        resolve(rawData)
       });
 
     }).on('error', (e) => {
@@ -43,6 +43,8 @@ function getPromise(url) {
 
   })
 }
+
+exports.getPromise = getPromise
 
 /**
  * 通过 ws end point 获取浏览器是否在运行
