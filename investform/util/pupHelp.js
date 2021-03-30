@@ -139,7 +139,7 @@ exports.mimicPhone =  async function (page) {
   console.log('before setBlockedURLs')
   await client.send('Network.setBlockedURLs', { // 禁止某些js文件
     urls: [
-      "https://hm.baidu.com/hm.js?e994280905f4e78db10dfbb739e87ee0",
+      "hm.baidu.com/hm.js?e994280905f4e78db10dfbb739e87ee0",
       "static.sensorsdata.cn/sdk/1.9.11/sensorsdata.min.js"
     ]
   })

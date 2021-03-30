@@ -19,6 +19,7 @@
     "gm": "^1.23.1",
     "images": "^3.2.3",
     "lowdb": "^1.0.0",
-    "puppeteer": "^8.0.0"
+    "puppeteer": "^8.0.0",
+    "tesseract.js": "^2.1.4"
   }
 }

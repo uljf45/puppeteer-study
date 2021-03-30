@@ -93,3 +93,6 @@ puppeteer/folder/*.png
 puppeteer/output
 
 investform/browserWSEndpoint.txt
+
+lib/eng.traineddata.gz
+eng.traineddata
