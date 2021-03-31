@@ -160,6 +160,10 @@ exports.mimicPhone =  async function (page) {
 exports.simpleType = function (page) {
   return async function (xpath, txt, options) {
     let el = await page.$x(xpath)
+    await el[0].evaluate(ele => {
+      ele.value = ''
+    })
+
     await el[0].type(txt, options)
   }
 }
@@ -177,6 +181,9 @@ exports.simpleWaitThenType = function (page) {
   return async function (xpath, txt) {
     await page.waitForXPath(xpath)
     let el = await page.$x(xpath)
+    await el[0].evaluate(ele => {
+      ele.value = ''
+    })
     await el[0].type(txt)
   }
 }

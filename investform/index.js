@@ -4,6 +4,14 @@ const path = require('path')
 const pupHelp = require('./util/pupHelp')
 
 let site = 'https://qpromotion.hdfax.com/v2/m/investmentFormInput/index.html'
+
+let target = process.argv[2]
+switch(target) {
+  case 'dev':
+    site = 'http://dev.hdfax.com/v2/m/investmentFormInput/index.html'
+    break
+}
+
 ;(async function () {
   
   const browser = await puppeteer.launch({
@@ -19,7 +27,7 @@ let site = 'https://qpromotion.hdfax.com/v2/m/investmentFormInput/index.html'
     args: [
       '--disable-web-security', //https 跨域
       '--allow-running-insecure-content',  //https 跨域
-      '--user-data-dir=C:\\MyChromeDevUserData2', //https 跨域 设置浏览器个人配置的路径，储存配置 cookie 使下次启动时能直接获取
+      '--user-data-dir=C:\\MyChromeDevUserData', //https 跨域 设置浏览器个人配置的路径，储存配置 cookie 使下次启动时能直接获取
       ' --auto-open-devtools-for-tabs', // 打开 devtool
       "--no-sandbox", 
     ],
@@ -120,86 +128,101 @@ let site = 'https://qpromotion.hdfax.com/v2/m/investmentFormInput/index.html'
   let prdName = spRes["resvProds"][0]["productName"]
   // console.log(prdName)
 
-  await simpleWaitThenTap(`//span[string()="单据类型*"]/../div`)
+  async function fill() {
+    await simpleWaitThenTap(`//span[string()="单据类型*"]/../div`)
 
-  await simpleWaitThenTap(`//div[@class="modalContentLeft"]//span[string()="普通单据13"]`)
-
-  await simpleTap(`//div[@class="modalFooter"]/span[string()="确定"]`)
-
-  await simpleType(`//input[@placeholder="请填写投顾姓名"]`, '毛颜')
-  await simpleType(`//input[@placeholder="请填写客户手机号"]`, '13632545135')
-  await simpleType(`//input[@placeholder="请填写客户姓名"]`, '陈泽敏')
-  await simpleType(`//input[@placeholder="请填写证件号码"]`, '440582199005161810')
-
-  let sel = await page.$x('//span[string()="是否有推荐人*"]/../select') // select下拉框选择
-  await sel[0].select("0")  // select 选中下面的option 值为0
-
-  await simpleType(`//input[@placeholder="请输入产品名称"]`, prdName)
-  await simpleWaitThenTap(`//li[string()="${prdName}"]`)
-
-  await simpleType(`//input[@placeholder="请输入金额"]`, '11')
-
-  await simpleType(`//span[string()="银行卡号*"]/../input[@placeholder="请填写银行卡号"]`, '123456789123456789')
-
-  await simpleType(`//input[@placeholder="请输入银行名称"]`, '中国工商银行', {
-    delay: 50
-  })
-
-  await simpleWaitThenTap(`//li[string()="中国工商银行"]`)
-
-  console.log('select bank name done')
-
-  await page.waitForResponse(resp => /op_query_bank_province_list/.test(resp.url()))
-
-  await simpleType(`//input[@placeholder="请输入开户行省份"]`, '广东省', {
-    delay: 50
-  })
-
-  await simpleWaitThenTap(`//li[string()="广东省"]`)
-
-  console.log('select province done')
-
-  await page.waitForResponse(resp => /op_query_bank_city_list/.test(resp.url()))
-
-  await simpleType(`//input[@placeholder="请输入开户行城市"]`, '深圳市', {
-    delay: 50
-  })
-
-  await simpleWaitThenTap(`//li[string()="深圳市"]`)
-
-  await page.waitForResponse(resp => /op_query_bank_branch_list/.test(resp.url()))
-
-  await simpleType(`//input[@placeholder="请输入开户行名称"]`, '中国工商银行深圳市分行', {
-    delay: 50
-  })
-
-  await simpleWaitThenTap(`//li[string()="中国工商银行深圳市分行"]`)
-
-  sel = await page.$x('//span[string()="客户身份*"]/../select')
-  await sel[0].select("1")  // select 选中下面的option 值为0
-
-  let uploadImg = await page.$x(`//div[contains(text(), "上传凭证信息")]//div[contains(@class, "img_select_leftx")]/img`)
-  await uploadImg[0].evaluate(ele => { //滚动到上传图片那
-    console.log('ele', ele)
-    ele.scrollIntoView()
-  })
-
-  let uploadInput = await page.$x(`//div[contains(text(), "上传凭证信息")]//input`)
-  uploadInput = uploadInput[0]
-  await uploadInput.uploadFile(`C:\\Users\\chenzemin\\Pictures\\icon-5.png`) // 上传文件
-
-  try {
-    page.waitForXPath('//div[@class="pop_name" and @style=""]/button', {
-      timeout: 10000
-    }).then(() => { //异步执行, 不使用await await会阻塞主线程
-      console.log('press ok')
-      page.$x('//div[@class="pop_name"]/button').then(el => {
-        el[0].tap() //此处tap 可能会与页面其他元素的tap相互影响， 因此放在最后执行
-      })
+    await simpleWaitThenTap(`//div[@class="modalContentLeft"]//span[string()="普通单据13"]`)
+  
+    await simpleTap(`//div[@class="modalFooter"]/span[string()="确定"]`)
+  
+    await simpleType(`//input[@placeholder="请填写投顾工号"]`, 'ic0012')
+    await simpleType(`//input[@placeholder="请填写客户手机号"]`, '13632545135')
+    await simpleType(`//input[@placeholder="请填写客户姓名"]`, '陈泽敏')
+    await simpleType(`//input[@placeholder="请填写证件号码"]`, '440582199005161810')
+  
+    let sel = await page.$x('//span[string()="是否有推荐人*"]/../select') // select下拉框选择
+    await sel[0].select("0")  // select 选中下面的option 值为0
+  
+    await simpleType(`//input[@placeholder="请输入产品名称"]`, prdName)
+    await simpleWaitThenTap(`//li[string()="${prdName}"]`)
+  
+    await simpleType(`//input[@placeholder="请输入金额"]`, '11')
+  
+    await simpleType(`//span[string()="银行卡号*"]/../input[@placeholder="请填写银行卡号"]`, '123456789123456789')
+  
+    await simpleType(`//input[@placeholder="请输入银行名称"]`, '中国工商银行', {
+      delay: 50
     })
-  } catch(err) {
-
+  
+    await simpleWaitThenTap(`//li[string()="中国工商银行"]`)
+  
+    console.log('select bank name done')
+  
+    await page.waitForResponse(resp => /op_query_bank_province_list/.test(resp.url()))
+  
+    await simpleType(`//input[@placeholder="请输入开户行省份"]`, '广东省', {
+      delay: 50
+    })
+  
+    await simpleWaitThenTap(`//li[string()="广东省"]`)
+  
+    console.log('select province done')
+  
+    await page.waitForResponse(resp => /op_query_bank_city_list/.test(resp.url()))
+  
+    await simpleType(`//input[@placeholder="请输入开户行城市"]`, '深圳市', {
+      delay: 50
+    })
+  
+    await simpleWaitThenTap(`//li[string()="深圳市"]`)
+  
+    await page.waitForResponse(resp => /op_query_bank_branch_list/.test(resp.url()))
+  
+    await simpleType(`//input[@placeholder="请输入开户行名称"]`, '中国工商银行深圳市分行', {
+      delay: 50
+    })
+  
+    await simpleWaitThenTap(`//li[string()="中国工商银行深圳市分行"]`)
+  
+    sel = await page.$x('//span[string()="客户身份*"]/../select')
+    await sel[0].select("1")  // select 选中下面的option 值为0
+  
+    let uploadImg = await page.$x(`//div[contains(text(), "上传凭证信息")]//div[contains(@class, "img_select_leftx")]/img`)
+    await uploadImg[0].evaluate(ele => { //滚动到上传图片那
+      console.log('ele', ele)
+      ele.scrollIntoView()
+    })
+  
+    let uploadInput = await page.$x(`//div[contains(text(), "上传凭证信息")]//input`)
+    uploadInput = uploadInput[0]
+    await uploadInput.uploadFile(`C:\\Users\\chenzemin\\Pictures\\icon-5.png`) // 上传文件
+  
+    try {
+      page.waitForXPath('//div[@class="pop_name" and @style=""]/button', {
+        timeout: 3000
+      }).then(() => { //异步执行, 不使用await await会阻塞主线程
+        console.log('press ok')
+        page.$x('//div[@class="pop_name"]/button').then(el => {
+          el[0].tap() //此处tap 可能会与页面其他元素的tap相互影响， 因此放在最后执行
+        })
+      }).catch(err => {
+        console.log('press ok timeout')
+      })
+    } catch(err) {
+  
+    }
   }
+
+  await fill()
+
+  page.on('console', async msg => {
+    let word = msg.text()
+    if (/^pup fill/.test(word)) {
+      await fill()
+    } 
+  })
+
+  
 
   console.log('done')
   
