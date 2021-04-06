@@ -6,7 +6,8 @@
   "scripts": {
     "serve": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "investDev": "node investform/index.js dev"
+    "investDev": "node investform/index.js dev",
+    "investQ": "node investform/index.js q"
   },
   "author": "",
   "license": "ISC",
