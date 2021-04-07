@@ -4,6 +4,7 @@ const express = require('express')
 const app = express()
 const port = 3000
 const couponApis = require('./api/coupon.js')
+const path = require('path')
 
 app.all('*',function (req, res, next) {
   res.header('Access-Control-Allow-Origin', req.headers.origin); //当允许携带cookies此处的白名单不能写’*’
@@ -112,6 +113,11 @@ app.post('/login', jsonParser, (req, res) => {
     code: '1000',
     auth: 'czm123456'
   })
+})
+
+app.get('/eif-omc-web/ftc/regionalCompanyReport/exportReportRosterTemplate', (req, res) => {
+  let p = path.resolve(__dirname, "./static/测试.xlsx")
+  res.download(p, "测试.xlsx")
 })
 
 app.listen(port, () => {
