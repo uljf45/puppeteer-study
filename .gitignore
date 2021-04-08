@@ -98,3 +98,5 @@ lib/eng.traineddata.gz
 eng.traineddata
 
 investform/captchas/*
+
+static

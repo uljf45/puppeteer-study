@@ -15,12 +15,14 @@
     "body-parser": "^1.19.0",
     "chalk": "^4.1.0",
     "cli-table": "^0.3.6",
+    "connect-busboy": "0.0.2",
     "cookie-parser": "^1.4.5",
     "del": "^6.0.0",
     "express": "^4.17.1",
     "gm": "^1.23.1",
     "images": "^3.2.3",
     "lowdb": "^1.0.0",
+    "multer": "^1.4.2",
     "puppeteer": "^8.0.0",
     "tesseract.js": "^2.1.4"
   }

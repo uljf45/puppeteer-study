@@ -127,12 +127,16 @@ if (dataWhere) {
 
   await page.waitForNavigation()
 
+  console.log('page.waitForNavigation')
+
   let [respBankInfo, respSellableProduct] = await Promise.all([  //判断多个接口请求
     page.waitForResponse(resp => /op_query_recommender_bank_info/.test(resp.url())),
     page.waitForResponse(resp => /op_query_sellable_resv_prod_quote_by_group_id/.test(resp.url())),
     page.waitForResponse(resp => /op_query_all_valid_bill_type/.test(resp.url())),
     page.waitForResponse(resp => /op_query_all_cert_type/.test(resp.url())),
   ])
+
+  console.log('respSellableProduct')
 
   let spRes = await respSellableProduct.json()
   let prdName = spRes["resvProds"][0]["productName"]
